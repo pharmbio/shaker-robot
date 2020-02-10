@@ -1,7 +1,7 @@
 #!/bin/bash
 NAME=arduino-shaker-server
 FBQN=arduino:megaavr:nona4809
-DEVICE=/dev/ttyACM0
+DEVICE=/dev/ttyACM1
 arduino-cli compile --fqbn $FBQN $NAME
 if [ $? -ne 0 ]; then
     echo "compile error, exit here"
