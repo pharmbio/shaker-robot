@@ -16,4 +16,18 @@ arduino-cli core install arduino:megaavr
 # Add user to serial user group
 sudo usermod -a -G dialout $USER
 # Logout from computer (for getting the usermod changes)
-``
+```
+
+## Python
+```
+# create and activate venv
+sudo apt install python3-venv
+python3 -m venv venv
+source venv/bin/activate
+
+# Install requirements
+pip install -r requirements.txt
+
+# run client
+pyhton arduino_shaker_client.py
+```
