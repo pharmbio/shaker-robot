@@ -50,7 +50,7 @@ def getFloatFromServer(option):
 
     # check response
     if(start_byte != START_BYTE):
-        raise Exception("Error wrong startbyte")
+        raise Exception("Error wrong startbyte" + str(start_byte))
 
     if(option != response_option):
         raise Exception("Error wrong response option")
@@ -76,13 +76,13 @@ def getByteFromServer(option):
 
     # check response
     if(start_byte != START_BYTE):
-        raise Exception("Error wrong startbyte")
+        raise Exception("Error wrong startbyte:" + str(start_byte))
 
     if(option != response_option):
-        raise Exception("Error wrong response option")
+        raise Exception("Error wrong response option:" + str(option))
 
     if(endbyte != END_BYTE):
-        raise Exception("Error wrong endbyte")
+        raise Exception("Error wrong endbyte:" + str(endbyte))
 
     # return response
     return response
@@ -114,7 +114,7 @@ with serial.Serial(serial_device, BAUD_RATE, timeout=2) as server:
     server.reset_output_buffer()
 
     # Serial seem to need a little time to get ready
-    time.sleep(0.1)
+    time.sleep(0.5)
     
     getByteFromServer(OPTION_PRESS_START_STOP)
 
