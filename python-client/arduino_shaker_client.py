@@ -30,8 +30,6 @@ OPTION_READ_VOLT = b'g';
 OPTION_READ_CURRENT = b'h';
 OPTION_GET_SPEED = b'i';
 
-#serial_device = '/dev/serial/by-id/usb-Arduino__www.arduino.cc__0043_55834323233351912192-if00'
-#serial_device = '/dev/serial/by-id/usb-Arduino_LLC_Arduino_Nano_Every_6EB94DED51514743594A2020FF06191B-if00'
 serial_device = '/dev/serial/by-id/usb-Arduino_LLC_Arduino_Nano_Every_A9873C9A51514743594A2020FF062C4A-if00'
 
 server = None
