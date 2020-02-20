@@ -29,5 +29,5 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 # run client
-pyhton arduino_shaker_client.py
+pyhton shaker_client.py
 ```

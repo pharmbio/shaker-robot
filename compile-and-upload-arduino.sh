@@ -1,7 +1,7 @@
 #!/bin/bash
 NAME=arduino-shaker-server
 FBQN=arduino:megaavr:nona4809
-DEVICE=/dev/serial/by-id/usb-Arduino_LLC_Arduino_Nano_Every_6EB94DED51514743594A2020FF06191B-if00
+DEVICE=/dev/serial/by-id/usb-Arduino_LLC_Arduino_Nano_Every_A9873C9A51514743594A2020FF062C4A-if00
 # the arduino-cli program doesn't work if you try to upload to the symbolic link /dev/serial/by-id/ so we
 # get the actual device with readlink program
 PORT=$(readlink -f "$DEVICE")

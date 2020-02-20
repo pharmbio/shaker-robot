@@ -8,6 +8,9 @@ const byte OK = '1';
 const byte ERROR_WRONG_START_BYTE = '2';
 const byte ERROR_UNKNOWN_OPTION = '3';
 const byte ERROR_WRONG_END_BYTE = '4';
+const byte ERROR_TOO_EARLY = '5';
+const byte ERROR_ALREADY_RUNNING = '6';
+const byte ERROR_ALREADY_STOPPED = '7';
 
 const byte OPTION_GET_TEMP = 'a';
 const byte OPTION_GET_HUMID = 'b';
@@ -18,15 +21,19 @@ const byte OPTION_PRESS_SPEED_DOWN = 'f';
 const byte OPTION_READ_VOLT = 'g';
 const byte OPTION_READ_CURRENT = 'h';
 const byte OPTION_GET_SPEED = 'i';
+const byte OPTION_PRESS_START = 'j';
+const byte OPTION_PRESS_STOP = 'k';
 
 const byte PIN_START_STOP = 3;
 const byte PIN_SPEED_UP = 4;
 const byte PIN_SPEED_DOWN = 5;
+
 const byte PIN_VOLTAGE = A0;
 const byte PIN_CURRENT = A1;
 const byte PIN_SPEED_SENSOR = 2;
 
 unsigned long speed_readings[4];
+unsigned long last_time_start_stop_pressed = 0;
 
 void setup() {
     Serial.setTimeout(1000);
@@ -70,10 +77,15 @@ void loop() {
   delay(10); // wait a little bit
 }
 
-
 void executeOption(byte option){
-  
-    if(option == OPTION_PRESS_START_STOP){
+
+    if(option == OPTION_PRESS_START){
+      pressStart();
+    }
+    else if(option == OPTION_PRESS_STOP){
+      pressStop();
+    }
+    else if(option == OPTION_PRESS_START_STOP){
       pressButton(PIN_START_STOP,300);
       writeOptionResponse(OPTION_PRESS_START_STOP, OK);
     }
@@ -102,6 +114,52 @@ void executeOption(byte option){
     }
 }
 
+void pressStart(){
+  unsigned long lastPressDiff = millis() - last_time_start_stop_pressed;
+
+  // check last press time > 3 sek
+  if(lastPressDiff < 3000){
+    writeOptionResponse(OPTION_PRESS_START, ERROR_TOO_EARLY);
+    return;
+  }
+
+  if(getSpeed() > 100){
+    writeOptionResponse(OPTION_PRESS_START, ERROR_ALREADY_RUNNING);
+    return;
+  }
+
+  last_time_start_stop_pressed = millis();
+  pressButton(PIN_START_STOP,300);
+  writeOptionResponse(OPTION_PRESS_START, OK);
+  
+}
+
+void pressStop(){
+  unsigned long lastPressDiff = millis() - last_time_start_stop_pressed;
+
+  // check last press time > 3 sek
+  if(lastPressDiff < 3000){
+    writeOptionResponse(OPTION_PRESS_STOP, ERROR_TOO_EARLY);
+    return;
+  }
+
+  if(getSpeed() < 100){
+    writeOptionResponse(OPTION_PRESS_STOP, ERROR_ALREADY_STOPPED);
+    return;
+  }
+
+  // always stop at same time on rotation
+  unsigned long diff = millis() - speed_readings[0];
+  if(diff < 500){
+    delay(500 - diff);
+  }
+
+  last_time_start_stop_pressed = millis();
+  pressButton(PIN_START_STOP,300);
+  writeOptionResponse(OPTION_PRESS_STOP, OK);
+  
+}
+
 void pressButton(byte pin, unsigned long time){
   if(DEBUG){
     Serial.print("press");
@@ -112,9 +170,7 @@ void pressButton(byte pin, unsigned long time){
   if(DEBUG){
     Serial.print("pressed");
   }
-  
 }
-
 
 float readCurrent(){
   int amp_read = analogRead(PIN_CURRENT);
