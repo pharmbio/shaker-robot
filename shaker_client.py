@@ -46,33 +46,51 @@ ERROR_ALREADY_STOPPED = 'ERROR_ALREADY_STOPPED'
 SERIAL_DEVICE =  '/dev/serial/by-id/usb-Arduino_LLC_Arduino_Nano_Every_A9873C9A51514743594A2020FF062C4A-if00'
 
 def startShaker():
-    response = getByteFromServer(OPTION_PRESS_START)
-    if(response == SERVER_RESPONSE_OK):
-        return OK
-    elif(response == SERVER_RESPONSE_ERROR_TOO_EARLY):
-        return ERROR_BUTTON_PRESS_EARLY
-    elif(response == SERVER_RESPONSE_ERROR_ALREADY_RUNNING):
-        return ERROR_ALREADY_RUNNING
-    else:
-        raise Exception("Error unexpected response from arduino-server:" + str(response))
+    try:
+        response = getByteFromServer(OPTION_PRESS_START)
+        if(response == SERVER_RESPONSE_OK):
+            return OK
+        elif(response == SERVER_RESPONSE_ERROR_TOO_EARLY):
+            return ERROR_BUTTON_PRESS_EARLY
+        elif(response == SERVER_RESPONSE_ERROR_ALREADY_RUNNING):
+            return ERROR_ALREADY_RUNNING
+        else:
+            logging.error(ERROR_UNEXPECTED_RESPONSE_FROM_ARDUINO + " : " + str(response))
+            return ERROR_UNEXPECTED_RESPONSE_FROM_ARDUINO
+    except Exception as e:
+        logging.error(traceback.format_exc())
+        logging.error(e)
+        return ERROR_UNKNOWN
 
 def stopShaker():
-    response = getByteFromServer(OPTION_PRESS_STOP)
-    if(response == SERVER_RESPONSE_OK):
-        return OK
-    elif(response == SERVER_RESPONSE_ERROR_TOO_EARLY):
-        return ERROR_BUTTON_PRESS_EARLY
-    elif(response == SERVER_RESPONSE_ERROR_ALREADY_STOPPED):
-        return ERROR_ALREADY_STOPPED
-    else:
-        raise Exception("Error unexpected response from arduino-server:" + str(response))
+    try:
+        response = getByteFromServer(OPTION_PRESS_STOP)
+        if(response == SERVER_RESPONSE_OK):
+            return OK
+        elif(response == SERVER_RESPONSE_ERROR_TOO_EARLY):
+            return ERROR_BUTTON_PRESS_EARLY
+        elif(response == SERVER_RESPONSE_ERROR_ALREADY_STOPPED):
+            return ERROR_ALREADY_STOPPED
+        else:
+            logging.error(ERROR_UNEXPECTED_RESPONSE_FROM_ARDUINO + " : " + str(response))
+            return ERROR_UNEXPECTED_RESPONSE_FROM_ARDUINO
+    except Exception as e:
+        logging.error(traceback.format_exc())
+        logging.error(e)
+        return ERROR_UNKNOWN
 
 def getStatus():
-    speed = getSpeed()
-    if(speed == 0):
-        return READY
-    else:
-        return BUSY
+    try:
+        speed = getSpeed()
+        if(speed == 0):
+            return READY
+        else:
+            return BUSY
+    except Exception as e:
+        logging.error(traceback.format_exc())
+        logging.error(e)
+        return ERROR_UNKNOWN
+    
 
 def getSpeed():
     speed = getFloatFromServer(OPTION_GET_SPEED)

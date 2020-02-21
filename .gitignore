@@ -1,3 +1,4 @@
 *arduino-shaker-server.arduino.megaavr*
 venv
 .vscode
+__pycache__
