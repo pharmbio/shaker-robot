@@ -28,6 +28,8 @@ source venv/bin/activate
 # Install requirements
 pip install -r requirements.txt
 
+<img src=images/P1010587.JPG width=400></img>
+
 # run client
 pyhton shaker_client.py
 ```
