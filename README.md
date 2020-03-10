@@ -31,4 +31,11 @@ pip install -r requirements.txt
 # run client
 pyhton shaker_client.py
 ```
-<img src=images/P1010587.JPG width=400></img>
+<img src=images/P1010587.JPG width=500></img>
+<br>
+<br>
+<img src=images/P1010588.JPG width=500></img>
+<br>
+<br>
+<img src=images/P1010592.JPG width=500></img>
+<br>
