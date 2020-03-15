@@ -39,3 +39,6 @@ pyhton shaker_client.py
 <br>
 <img src=images/P1010592.JPG width=500></img>
 <br>
+<br>
+<img src=images/shaker-wiring.png width=500></img>
+<br>
